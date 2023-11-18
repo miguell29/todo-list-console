@@ -1,6 +1,6 @@
 import 'colors';
 
-import { menu , pause , readLine} from './helpers/inquirer.js';
+import { menu , pause , readLine, menuDelete, confirm, showCheckList} from './helpers/inquirer.js';
 import Tasks from './models/tasks.js';
 import {saveData, readData} from './helpers/handleData.js';
 
@@ -33,6 +33,23 @@ const main = async() => {
                 break;
             case '4':
                 tasks.isCompleted(false);
+                break;
+            case '5':
+                const ids = await showCheckList(tasks.listArray);
+                tasks.toggleCompleted(ids);
+                console.log(ids);
+                break;
+            case '6':
+                const id = await menuDelete(tasks.listArray);
+                if (id === '0') {
+                    continue;
+                }
+                const response = await confirm('Are you sure?');
+                if (response) {
+                    tasks.deleteTask(id);
+                    console.log('Task deleted');
+                }
+                console.log(id);
                 break;
         }
         saveData(tasks.listArray);

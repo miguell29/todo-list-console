@@ -69,8 +69,68 @@ export const readLine = async (message) => {
             }
         }
     ]
-    
     const {description} = await inquirer.prompt(questions);
     return description;
 }
 
+export const menuDelete = async (tasks = []) => {
+    const choices = tasks.map((task, i) => {
+        const index = `${i + 1}.`.green;
+        return {
+            value: task.id,
+            name: `${index} ${task.description}`
+        }
+    });
+
+    choices.unshift({
+        value: '0',
+        name: '0.'.green + ' Cancel'
+    });
+
+    const questions = [
+        {
+            type: 'list',
+            name: 'id',
+            message: 'Delete',
+            choices
+        }
+    ];
+    const {id} = await inquirer.prompt(questions);
+    return id;
+}
+
+export const confirm = async (message) => {
+    const questions = [
+        {
+            type: 'confirm',
+            name: 'ok',
+            message
+        }
+    ]
+
+    const {ok} = await inquirer.prompt(questions);
+    return ok;
+}
+export const showCheckList = async (tasks = []) => {
+    const choices = tasks.map( (task, id) => {
+        const index = `${id + 1}.`.green;
+        return {
+            value: task.id,
+            name: `${index} ${task.description}`,
+            checked: (task.completed) ? true : false
+        }
+    })
+
+    const questions = [
+        {
+            type: 'checkbox',
+            name: 'ids',
+            message: 'Select',
+            choices
+        }
+    ]
+
+    const {ids} = await inquirer.prompt(questions);
+    return ids;
+
+}
